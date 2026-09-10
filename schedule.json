@@ -1,0 +1,47 @@
+{
+  "items": [],
+  "fallback": [
+    {
+      "image": "single-mom-fall-event.png",
+      "duration": 5,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "mens-fall-gathering.png",
+      "duration": 5,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "fall-festival-v3.png",
+      "duration": 5,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    }
+  ]
+}
