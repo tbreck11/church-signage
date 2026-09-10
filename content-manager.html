@@ -1,0 +1,849 @@
+<title>Signage Board</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #EDF1EE;
+    --surface: #FFFFFF;
+    --surface-2: #F4F7F4;
+    --ink: #172422;
+    --muted: #5B6D68;
+    --line: #D7DED9;
+    --line-strong: #C1CBC4;
+    --accent: #A2731F;
+    --accent-strong: #8A5F19;
+    --accent-ink: #FFF8EC;
+    --accent-wash: #F4E9D3;
+    --good: #2F6B4C;
+    --good-wash: #E3EFE7;
+    --danger: #AE4A34;
+    --danger-wash: #F6E7E2;
+    --shadow: 0 1px 2px rgba(23, 36, 34, 0.06), 0 8px 24px -12px rgba(23, 36, 34, 0.18);
+    --radius: 10px;
+    --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+    --font-body: "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1513;
+      --surface: #16201D;
+      --surface-2: #1B2622;
+      --ink: #E7ECE8;
+      --muted: #93A49D;
+      --line: #2A3733;
+      --line-strong: #37453F;
+      --accent: #D6A857;
+      --accent-strong: #E7BE72;
+      --accent-ink: #1B140A;
+      --accent-wash: #2C2413;
+      --good: #6FBB93;
+      --good-wash: #17281F;
+      --danger: #E28468;
+      --danger-wash: #2C1B15;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1513;
+    --surface: #16201D;
+    --surface-2: #1B2622;
+    --ink: #E7ECE8;
+    --muted: #93A49D;
+    --line: #2A3733;
+    --line-strong: #37453F;
+    --accent: #D6A857;
+    --accent-strong: #E7BE72;
+    --accent-ink: #1B140A;
+    --accent-wash: #2C2413;
+    --good: #6FBB93;
+    --good-wash: #17281F;
+    --danger: #E28468;
+    --danger-wash: #2C1B15;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    margin: 0;
+    padding-block: 28px 80px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding-inline: 18px; }
+
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
+  a { color: var(--accent-strong); }
+
+  /* ---------- header ---------- */
+  header.top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .brand h1 { font-size: 1.55rem; letter-spacing: -0.01em; }
+  .brand .sub { color: var(--muted); font-size: 0.92rem; }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em;
+    padding: 6px 12px; border-radius: 999px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    color: var(--muted); cursor: pointer;
+  }
+  .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex: none; }
+  .status-pill.connected { color: var(--good); border-color: color-mix(in srgb, var(--good) 35%, var(--line)); background: var(--good-wash); }
+  .status-pill.connected .dot { background: var(--good); }
+  .status-pill.error { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, var(--line)); background: var(--danger-wash); }
+  .status-pill.error .dot { background: var(--danger); }
+
+  /* ---------- generic card ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .card + .card { margin-top: 18px; }
+  .card-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    padding: 16px 18px 0 18px;
+  }
+  .card-head h2 { font-size: 1.15rem; }
+  .card-head .hint { color: var(--muted); font-size: 0.85rem; }
+  .card-body { padding: 14px 18px 18px 18px; }
+
+  label { font-size: 0.82rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; letter-spacing: 0.01em; }
+  input[type="text"], input[type="password"], input[type="time"], input[type="number"] {
+    font: inherit; color: var(--ink); background: var(--surface-2);
+    border: 1px solid var(--line-strong); border-radius: 7px;
+    padding: 8px 10px; width: 100%;
+  }
+  input:focus-visible, button:focus-visible, .chip:focus-visible, .status-pill:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+  .field { margin-bottom: 12px; }
+  .field-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .field-row > .field { flex: 1 1 160px; }
+  .field .note { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  button {
+    font: inherit; font-weight: 600; cursor: pointer; border-radius: 7px;
+    border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--ink);
+    padding: 9px 14px; letter-spacing: 0.01em;
+  }
+  button:hover { border-color: var(--line-strong); background: var(--line); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+  button.ghost { background: transparent; border-color: transparent; color: var(--muted); padding: 6px 8px; }
+  button.ghost:hover { background: var(--surface-2); color: var(--ink); }
+  button.danger-ghost { background: transparent; border-color: transparent; color: var(--danger); padding: 6px 8px; }
+  button.danger-ghost:hover { background: var(--danger-wash); }
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
+  button svg { display: block; }
+
+  /* ---------- connect card ---------- */
+  #connectCard .card-body { max-width: 480px; }
+  #connectMsg { font-size: 0.86rem; margin-top: 10px; min-height: 1.2em; }
+  #connectMsg.err { color: var(--danger); }
+  #connectMsg.ok { color: var(--good); }
+
+  /* ---------- image library ---------- */
+  .dropzone {
+    border: 1.5px dashed var(--line-strong); border-radius: 9px;
+    padding: 22px 14px; text-align: center; color: var(--muted);
+    font-size: 0.9rem; cursor: pointer; background: var(--surface-2);
+  }
+  .dropzone.drag { border-color: var(--accent); color: var(--accent-strong); background: var(--accent-wash); }
+  .dropzone strong { color: var(--ink); }
+
+  .image-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    gap: 10px; margin-top: 14px;
+  }
+  .image-tile { position: relative; }
+  .image-tile .thumb {
+    width: 100%; aspect-ratio: 16/10; object-fit: cover;
+    border-radius: 7px; border: 1px solid var(--line); background: var(--surface-2); display: block;
+  }
+  .image-tile .name {
+    font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted);
+    margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .image-tile .rm {
+    position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(20, 20, 18, 0.62); color: #fff; border: none; padding: 0;
+    display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .12s;
+  }
+  .image-tile:hover .rm, .image-tile:focus-within .rm { opacity: 1; }
+  .image-tile.uploading .thumb { opacity: 0.45; }
+  .image-tile .spin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+  /* ---------- schedule rows ---------- */
+  .slide-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 13px 0; border-top: 1px solid var(--line);
+  }
+  .slide-row:first-child { border-top: none; padding-top: 4px; }
+  .slide-thumb {
+    width: 72px; height: 45px; flex: none; border-radius: 6px; object-fit: cover;
+    border: 1px solid var(--line); background: var(--surface-2);
+  }
+  .slide-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .slide-top-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .slide-select { flex: 1 1 180px; }
+  select {
+    font: inherit; color: var(--ink); background: var(--surface-2);
+    border: 1px solid var(--line-strong); border-radius: 7px; padding: 8px 10px; width: 100%;
+  }
+
+  .day-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+    width: 30px; height: 26px; display: flex; align-items: center; justify-content: center;
+    border-radius: 6px; border: 1px solid var(--line-strong); background: var(--surface-2);
+    color: var(--muted); cursor: pointer; user-select: none;
+  }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  .time-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .time-controls .to { color: var(--muted); font-size: 0.82rem; }
+  .allday-toggle { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--muted); cursor: pointer; }
+  .allday-toggle input { width: auto; }
+
+  .dur-field { display: flex; align-items: center; gap: 6px; }
+  .dur-field input { width: 64px; font-family: var(--font-mono); text-align: right; }
+  .dur-field .unit { font-size: 0.8rem; color: var(--muted); }
+
+  .slide-actions { display: flex; flex-direction: column; gap: 2px; flex: none; }
+
+  .add-row { margin-top: 14px; }
+
+  .empty-note { color: var(--muted); font-size: 0.9rem; padding: 6px 0 2px 0; }
+
+  /* ---------- save bar ---------- */
+  .savebar {
+    position: sticky; bottom: 14px; margin-top: 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 12px 16px;
+  }
+  .savebar .msg { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .savebar .msg.err { color: var(--danger); }
+  .savebar .msg.ok { color: var(--good); }
+
+  .hidden { display: none !important; }
+
+  footer.foot { margin-top: 26px; text-align: center; color: var(--muted); font-size: 0.8rem; }
+  footer.foot a { color: var(--muted); text-decoration: underline; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .image-tile .rm, .dropzone { transition: opacity .12s, border-color .12s, background .12s, color .12s; }
+  }
+
+  @media (max-width: 560px) {
+    .slide-row { flex-wrap: wrap; }
+    .slide-thumb { width: 100%; height: 110px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <h1>Signage Board</h1>
+      <span class="sub">announcement content &amp; schedule</span>
+    </div>
+    <button class="status-pill" id="statusPill" type="button">
+      <span class="dot"></span><span id="statusText">Not connected</span>
+    </button>
+  </header>
+
+  <!-- ===================== connect card ===================== -->
+  <section class="card" id="connectCard">
+    <div class="card-head">
+      <h2>Connect your GitHub repo</h2>
+      <span class="hint">one-time setup</span>
+    </div>
+    <div class="card-body">
+      <p style="margin:0 0 14px 0; color:var(--muted); font-size:0.9rem;">
+        Images and the schedule live in a small GitHub repo, which the Roku app reads from.
+        See <strong>SETUP.md</strong> for how to create the repo and a token — it takes about five minutes.
+      </p>
+      <div class="field-row">
+        <div class="field">
+          <label for="cfgUser">GitHub username or org</label>
+          <input type="text" id="cfgUser" autocomplete="off" placeholder="e.g. gracechurch" />
+        </div>
+        <div class="field">
+          <label for="cfgRepo">Repository name</label>
+          <input type="text" id="cfgRepo" autocomplete="off" placeholder="e.g. church-signage" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field" style="flex:1 1 100px;">
+          <label for="cfgBranch">Branch</label>
+          <input type="text" id="cfgBranch" autocomplete="off" placeholder="main" value="main" />
+        </div>
+        <div class="field" style="flex:3 1 260px;">
+          <label for="cfgToken">Access token</label>
+          <input type="password" id="cfgToken" autocomplete="off" placeholder="github_pat_…" />
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:4px;">
+        <button class="primary" id="btnConnect" type="button">Connect</button>
+        <button class="ghost" id="btnForget" type="button">Forget saved token</button>
+      </div>
+      <div id="connectMsg"></div>
+      <p style="margin:14px 0 0 0; font-size:0.78rem; color:var(--muted);">
+        The token is stored only in this browser (never sent anywhere but GitHub) and should be a
+        <em>fine-grained</em> token scoped to just this one repository, with Contents: Read and write.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== main app (hidden until connected) ===================== -->
+  <div id="app" class="hidden">
+
+    <!-- image library -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Image library</h2>
+        <span class="hint" id="imgCount">0 images</span>
+      </div>
+      <div class="card-body">
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload images">
+          <strong>Click to choose images</strong> or drag them here — JPG or PNG, one screen each.
+        </div>
+        <input type="file" id="fileInput" accept="image/png,image/jpeg" multiple class="hidden" />
+        <div class="image-grid" id="imageGrid"></div>
+      </div>
+    </section>
+
+    <!-- weekly schedule -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Weekly schedule</h2>
+        <span class="hint">shown when the day &amp; time match</span>
+      </div>
+      <div class="card-body">
+        <div id="scheduleList"></div>
+        <div class="empty-note hidden" id="scheduleEmpty">No scheduled slides yet — add one below.</div>
+        <div class="add-row">
+          <button type="button" id="btnAddSlide">+ Add scheduled slide</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- fallback -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Always show</h2>
+        <span class="hint">used when nothing above is scheduled</span>
+      </div>
+      <div class="card-body">
+        <div id="fallbackList"></div>
+        <div class="empty-note hidden" id="fallbackEmpty">Nothing set — the screen will show a status message when idle.</div>
+        <div class="add-row">
+          <button type="button" id="btnAddFallback">+ Add default slide</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="savebar">
+      <div class="msg" id="saveMsg">No changes yet.</div>
+      <button class="primary" id="btnSave" type="button">Save to GitHub</button>
+    </div>
+  </div>
+
+  <footer class="foot">Church Signage content manager &middot; talks directly to your GitHub repo, no other server involved</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DAY_CODES = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  var DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
+  var DEFAULT_DURATION = 12;
+
+  var state = {
+    cfg: null,            // {user, repo, branch, token}
+    images: [],           // [{name, sha, download_url}]
+    scheduleSha: null,    // sha of schedule.json, if it exists
+    items: [],            // scheduled slides
+    fallback: [],         // always-show slides
+    dirty: false
+  };
+
+  // ---------------- persistence (this browser only) ----------------
+  function loadCfg() {
+    try {
+      var raw = localStorage.getItem("church-signage-config");
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function saveCfg(cfg) {
+    try { localStorage.setItem("church-signage-config", JSON.stringify(cfg)); } catch (e) {}
+  }
+  function clearCfg() {
+    try { localStorage.removeItem("church-signage-config"); } catch (e) {}
+  }
+
+  // ---------------- GitHub API helpers ----------------
+  function apiUrl(path) {
+    return "https://api.github.com/repos/" + state.cfg.user + "/" + state.cfg.repo + "/contents/" + path;
+  }
+  function ghHeaders(extra) {
+    var h = {
+      "Authorization": "Bearer " + state.cfg.token,
+      "Accept": "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+    if (extra) for (var k in extra) h[k] = extra[k];
+    return h;
+  }
+  function utf8ToBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function base64ToUtf8(b64) {
+    return decodeURIComponent(escape(atob(b64.replace(/\n/g, ""))));
+  }
+
+  function ghGet(path) {
+    return fetch(apiUrl(path) + "?ref=" + encodeURIComponent(state.cfg.branch), { headers: ghHeaders() })
+      .then(function (res) {
+        if (res.status === 404) return null;
+        if (!res.ok) return res.json().then(function (b) { throw new Error(b.message || ("GitHub error " + res.status)); });
+        return res.json();
+      });
+  }
+  function ghPut(path, contentStr, sha, message) {
+    var body = { message: message, content: utf8ToBase64(contentStr), branch: state.cfg.branch };
+    if (sha) body.sha = sha;
+    return fetch(apiUrl(path), { method: "PUT", headers: ghHeaders({ "Content-Type": "application/json" }), body: JSON.stringify(body) })
+      .then(function (res) {
+        return res.json().then(function (b) {
+          if (!res.ok) throw new Error(b.message || ("GitHub error " + res.status));
+          return b;
+        });
+      });
+  }
+  function ghDelete(path, sha, message) {
+    var body = { message: message, sha: sha, branch: state.cfg.branch };
+    return fetch(apiUrl(path), { method: "DELETE", headers: ghHeaders({ "Content-Type": "application/json" }), body: JSON.stringify(body) })
+      .then(function (res) {
+        if (!res.ok) return res.json().then(function (b) { throw new Error(b.message || ("GitHub error " + res.status)); });
+        return true;
+      });
+  }
+
+  function sanitizeFileName(name) {
+    var parts = name.split(".");
+    var ext = parts.length > 1 ? parts.pop().toLowerCase().replace(/[^a-z0-9]/g, "") : "jpg";
+    var base = parts.join(".").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    if (!base) base = "image";
+    return base + "." + (ext || "jpg");
+  }
+
+  // ---------------- connection flow ----------------
+  var connectMsg = document.getElementById("connectMsg");
+  var statusPill = document.getElementById("statusPill");
+  var statusText = document.getElementById("statusText");
+  var appEl = document.getElementById("app");
+  var connectCard = document.getElementById("connectCard");
+
+  function setStatus(mode, text) {
+    statusPill.className = "status-pill" + (mode ? " " + mode : "");
+    statusText.textContent = text;
+  }
+
+  function connect(fromSaved) {
+    var user = document.getElementById("cfgUser").value.trim();
+    var repo = document.getElementById("cfgRepo").value.trim();
+    var branch = document.getElementById("cfgBranch").value.trim() || "main";
+    var token = document.getElementById("cfgToken").value.trim();
+
+    if (!user || !repo || !token) {
+      connectMsg.className = "err";
+      connectMsg.textContent = "Fill in username, repository, and token.";
+      return;
+    }
+    state.cfg = { user: user, repo: repo, branch: branch, token: token };
+    connectMsg.className = "";
+    connectMsg.textContent = "Connecting…";
+    setStatus("", "Connecting…");
+
+    loadEverything().then(function () {
+      saveCfg(state.cfg);
+      connectMsg.className = "ok";
+      connectMsg.textContent = "Connected.";
+      setStatus("connected", user + "/" + repo);
+      appEl.classList.remove("hidden");
+    }).catch(function (err) {
+      connectMsg.className = "err";
+      var hint = "";
+      if (err instanceof TypeError) {
+        hint = " This page's network access is being blocked by wherever it's currently open. " +
+          "If you're viewing this inside a Claude preview/artifact, that's expected — download the " +
+          "content-manager.html file instead and open it directly in your browser, or host it via " +
+          "GitHub Pages in your repo (see SETUP.md). It won't work embedded in a Claude page.";
+      }
+      connectMsg.textContent = "Couldn't connect: " + err.message + "." + hint;
+      setStatus("error", "Connection failed");
+    });
+  }
+
+  function loadEverything() {
+    return ghGet("images").then(function (list) {
+      state.images = (list || []).filter(function (f) { return f.type === "file"; }).map(function (f) {
+        return { name: f.name, sha: f.sha, download_url: f.download_url };
+      });
+      renderImages();
+      return ghGet("schedule.json");
+    }).then(function (file) {
+      if (file) {
+        state.scheduleSha = file.sha;
+        var data = {};
+        try { data = JSON.parse(base64ToUtf8(file.content)); } catch (e) { data = {}; }
+        state.items = normalizeItems(data.items);
+        state.fallback = normalizeItems(data.fallback);
+      } else {
+        state.scheduleSha = null;
+        state.items = [];
+        state.fallback = [];
+      }
+      renderSchedule();
+      renderFallback();
+      markClean("Loaded from GitHub.");
+    });
+  }
+
+  function normalizeItems(arr) {
+    if (!Array.isArray(arr)) return [];
+    return arr.map(function (it) {
+      var days = Array.isArray(it.days) ? it.days.slice() : DAY_CODES.slice();
+      var allDay = !it.startTime && !it.endTime;
+      return {
+        id: cryptoId(),
+        image: it.image || "",
+        days: days,
+        allDay: allDay,
+        startTime: it.startTime || "09:00",
+        endTime: it.endTime || "17:00",
+        duration: it.duration || DEFAULT_DURATION,
+        enabled: it.enabled !== false
+      };
+    });
+  }
+
+  function cryptoId() { return "s" + Math.random().toString(36).slice(2, 10); }
+
+  document.getElementById("btnConnect").addEventListener("click", function () { connect(false); });
+  document.getElementById("btnForget").addEventListener("click", function () {
+    clearCfg();
+    document.getElementById("cfgToken").value = "";
+    connectMsg.className = "";
+    connectMsg.textContent = "Saved token cleared from this browser.";
+  });
+  statusPill.addEventListener("click", function () {
+    connectCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // ---------------- image library ----------------
+  var imageGrid = document.getElementById("imageGrid");
+  var imgCount = document.getElementById("imgCount");
+  var dropzone = document.getElementById("dropzone");
+  var fileInput = document.getElementById("fileInput");
+
+  function renderImages() {
+    imgCount.textContent = state.images.length + (state.images.length === 1 ? " image" : " images");
+    imageGrid.innerHTML = "";
+    state.images.forEach(function (img) {
+      var tile = document.createElement("div");
+      tile.className = "image-tile";
+      tile.innerHTML =
+        '<img class="thumb" src="' + img.download_url + '" alt="" loading="lazy" />' +
+        '<div class="name">' + escapeHtml(img.name) + "</div>" +
+        '<button class="rm" type="button" title="Delete image" aria-label="Delete ' + escapeHtml(img.name) + '">&times;</button>';
+      tile.querySelector(".rm").addEventListener("click", function () { deleteImage(img); });
+      imageGrid.appendChild(tile);
+    });
+    refreshImageSelects();
+  }
+
+  function deleteImage(img) {
+    if (!confirm('Delete "' + img.name + '" from the repo? Slides using it will need a new image picked.')) return;
+    ghDelete("images/" + img.name, img.sha, "Remove " + img.name + " via content manager").then(function () {
+      state.images = state.images.filter(function (i) { return i.name !== img.name; });
+      renderImages();
+    }).catch(function (err) { alert("Couldn't delete: " + err.message); });
+  }
+
+  function uploadFiles(files) {
+    Array.prototype.forEach.call(files, function (file) {
+      var name = sanitizeFileName(file.name);
+      var tile = document.createElement("div");
+      tile.className = "image-tile uploading";
+      tile.innerHTML = '<div class="thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.7rem;">uploading…</div>' +
+        '<div class="name">' + escapeHtml(name) + "</div>";
+      imageGrid.appendChild(tile);
+
+      var reader = new FileReader();
+      reader.onload = function () {
+        var base64 = reader.result.split(",")[1];
+        var existing = state.images.find(function (i) { return i.name === name; });
+        fetch(apiUrl("images/" + name), {
+          method: "PUT",
+          headers: ghHeaders({ "Content-Type": "application/json" }),
+          body: JSON.stringify({
+            message: "Add " + name + " via content manager",
+            content: base64,
+            branch: state.cfg.branch,
+            sha: existing ? existing.sha : undefined
+          })
+        }).then(function (res) { return res.json().then(function (b) { if (!res.ok) throw new Error(b.message || "upload failed"); return b; }); })
+          .then(function (b) {
+            var entry = { name: name, sha: b.content.sha, download_url: b.content.download_url };
+            state.images = state.images.filter(function (i) { return i.name !== name; });
+            state.images.push(entry);
+            renderImages();
+            markDirtyMaybeUsed(name);
+          }).catch(function (err) {
+            tile.querySelector(".thumb").textContent = "failed";
+            tile.querySelector(".thumb").style.color = "var(--danger)";
+            console.error(err);
+          });
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function markDirtyMaybeUsed() { /* image list changes don't need a schedule save */ }
+
+  dropzone.addEventListener("click", function () { fileInput.click(); });
+  dropzone.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") fileInput.click(); });
+  fileInput.addEventListener("change", function () { uploadFiles(fileInput.files); fileInput.value = ""; });
+  ["dragenter", "dragover"].forEach(function (evt) {
+    dropzone.addEventListener(evt, function (e) { e.preventDefault(); dropzone.classList.add("drag"); });
+  });
+  ["dragleave", "drop"].forEach(function (evt) {
+    dropzone.addEventListener(evt, function (e) { e.preventDefault(); dropzone.classList.remove("drag"); });
+  });
+  dropzone.addEventListener("drop", function (e) {
+    if (e.dataTransfer && e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files);
+  });
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------------- schedule editor ----------------
+  var scheduleList = document.getElementById("scheduleList");
+  var scheduleEmpty = document.getElementById("scheduleEmpty");
+  var fallbackList = document.getElementById("fallbackList");
+  var fallbackEmpty = document.getElementById("fallbackEmpty");
+
+  function refreshImageSelects() {
+    document.querySelectorAll("select.slide-select").forEach(function (sel) {
+      var current = sel.value;
+      sel.innerHTML = state.images.map(function (img) {
+        return '<option value="' + escapeHtml(img.name) + '">' + escapeHtml(img.name) + "</option>";
+      }).join("") || '<option value="">(no images uploaded yet)</option>';
+      if (current) sel.value = current;
+    });
+  }
+
+  function renderSchedule() {
+    renderList(scheduleList, scheduleEmpty, state.items, true);
+  }
+  function renderFallback() {
+    renderList(fallbackList, fallbackEmpty, state.fallback, false);
+  }
+
+  function renderList(container, emptyEl, items, withSchedule) {
+    container.innerHTML = "";
+    emptyEl.classList.toggle("hidden", items.length > 0);
+    items.forEach(function (item, idx) {
+      container.appendChild(buildRow(item, idx, items, withSchedule));
+    });
+    refreshImageSelects();
+  }
+
+  function buildRow(item, idx, list, withSchedule) {
+    var row = document.createElement("div");
+    row.className = "slide-row";
+
+    var thumbSrc = "";
+    var found = state.images.find(function (i) { return i.name === item.image; });
+    if (found) thumbSrc = found.download_url;
+
+    var daysHtml = "";
+    if (withSchedule) {
+      daysHtml = '<div class="day-chips">' + DAY_CODES.map(function (code, i) {
+        var on = item.days.indexOf(code) !== -1;
+        return '<button type="button" class="chip' + (on ? " on" : "") + '" data-day="' + code + '" title="' + code + '">' + DAY_LABELS[i] + "</button>";
+      }).join("") + "</div>";
+    }
+
+    var timeHtml = "";
+    if (withSchedule) {
+      timeHtml =
+        '<div class="time-controls">' +
+        '<label class="allday-toggle"><input type="checkbox" class="allday"' + (item.allDay ? " checked" : "") + ' /> All day</label>' +
+        '<input type="time" class="startTime" value="' + item.startTime + '"' + (item.allDay ? " disabled" : "") + ' />' +
+        '<span class="to">to</span>' +
+        '<input type="time" class="endTime" value="' + item.endTime + '"' + (item.allDay ? " disabled" : "") + ' />' +
+        "</div>";
+    }
+
+    row.innerHTML =
+      '<img class="slide-thumb" src="' + thumbSrc + '" alt="" />' +
+      '<div class="slide-main">' +
+        '<div class="slide-top-row">' +
+          '<select class="slide-select"><option value="">' + (state.images.length ? "choose image…" : "no images yet") + "</option></select>" +
+          '<div class="dur-field"><input type="number" class="duration" min="2" max="600" value="' + item.duration + '" /><span class="unit">sec</span></div>' +
+        "</div>" +
+        daysHtml + timeHtml +
+      "</div>" +
+      '<div class="slide-actions">' +
+        '<button class="ghost" type="button" data-act="up" title="Move up">&uarr;</button>' +
+        '<button class="ghost" type="button" data-act="down" title="Move down">&darr;</button>' +
+        '<button class="danger-ghost" type="button" data-act="del" title="Remove">&times;</button>' +
+      "</div>";
+
+    var select = row.querySelector(".slide-select");
+    select.value = item.image;
+    select.addEventListener("change", function () {
+      item.image = select.value;
+      var f = state.images.find(function (i) { return i.name === item.image; });
+      row.querySelector(".slide-thumb").src = f ? f.download_url : "";
+      markDirty();
+    });
+
+    row.querySelector(".duration").addEventListener("input", function (e) {
+      item.duration = parseInt(e.target.value, 10) || DEFAULT_DURATION;
+      markDirty();
+    });
+
+    if (withSchedule) {
+      row.querySelectorAll(".chip").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          var day = chip.getAttribute("data-day");
+          var i = item.days.indexOf(day);
+          if (i === -1) item.days.push(day); else item.days.splice(i, 1);
+          chip.classList.toggle("on");
+          markDirty();
+        });
+      });
+      var allday = row.querySelector(".allday");
+      var startInp = row.querySelector(".startTime");
+      var endInp = row.querySelector(".endTime");
+      allday.addEventListener("change", function () {
+        item.allDay = allday.checked;
+        startInp.disabled = item.allDay;
+        endInp.disabled = item.allDay;
+        markDirty();
+      });
+      startInp.addEventListener("change", function () { item.startTime = startInp.value; markDirty(); });
+      endInp.addEventListener("change", function () { item.endTime = endInp.value; markDirty(); });
+    }
+
+    row.querySelector('[data-act="del"]').addEventListener("click", function () {
+      list.splice(idx, 1);
+      markDirty();
+      withSchedule ? renderSchedule() : renderFallback();
+    });
+    row.querySelector('[data-act="up"]').addEventListener("click", function () {
+      if (idx === 0) return;
+      list.splice(idx - 1, 0, list.splice(idx, 1)[0]);
+      markDirty();
+      withSchedule ? renderSchedule() : renderFallback();
+    });
+    row.querySelector('[data-act="down"]').addEventListener("click", function () {
+      if (idx === list.length - 1) return;
+      list.splice(idx + 1, 0, list.splice(idx, 1)[0]);
+      markDirty();
+      withSchedule ? renderSchedule() : renderFallback();
+    });
+
+    return row;
+  }
+
+  document.getElementById("btnAddSlide").addEventListener("click", function () {
+    state.items.push({
+      id: cryptoId(), image: state.images[0] ? state.images[0].name : "",
+      days: DAY_CODES.slice(), allDay: true, startTime: "09:00", endTime: "17:00",
+      duration: DEFAULT_DURATION, enabled: true
+    });
+    markDirty();
+    renderSchedule();
+  });
+  document.getElementById("btnAddFallback").addEventListener("click", function () {
+    state.fallback.push({
+      id: cryptoId(), image: state.images[0] ? state.images[0].name : "",
+      days: DAY_CODES.slice(), allDay: true, startTime: "09:00", endTime: "17:00",
+      duration: DEFAULT_DURATION, enabled: true
+    });
+    markDirty();
+    renderFallback();
+  });
+
+  // ---------------- save ----------------
+  var saveMsg = document.getElementById("saveMsg");
+  function markDirty() {
+    state.dirty = true;
+    saveMsg.className = "msg";
+    saveMsg.textContent = "Unsaved changes.";
+  }
+  function markClean(text) {
+    state.dirty = false;
+    saveMsg.className = "msg ok";
+    saveMsg.textContent = text;
+  }
+
+  function itemToApi(item) {
+    var out = { image: item.image, duration: item.duration, days: item.days.slice(), enabled: item.enabled !== false };
+    if (!item.allDay) { out.startTime = item.startTime; out.endTime = item.endTime; }
+    return out;
+  }
+
+  document.getElementById("btnSave").addEventListener("click", function () {
+    var payload = {
+      items: state.items.filter(function (i) { return i.image; }).map(itemToApi),
+      fallback: state.fallback.filter(function (i) { return i.image; }).map(itemToApi)
+    };
+    var json = JSON.stringify(payload, null, 2);
+    saveMsg.className = "msg";
+    saveMsg.textContent = "Saving…";
+    ghPut("schedule.json", json, state.scheduleSha, "Update schedule via content manager")
+      .then(function (res) {
+        state.scheduleSha = res.content.sha;
+        markClean("Saved just now. The board checks for updates automatically.");
+      })
+      .catch(function (err) {
+        saveMsg.className = "msg err";
+        saveMsg.textContent = "Couldn't save: " + err.message;
+      });
+  });
+
+  // ---------------- boot ----------------
+  var saved = loadCfg();
+  if (saved) {
+    document.getElementById("cfgUser").value = saved.user || "";
+    document.getElementById("cfgRepo").value = saved.repo || "";
+    document.getElementById("cfgBranch").value = saved.branch || "main";
+    document.getElementById("cfgToken").value = saved.token || "";
+    connect(true);
+  }
+})();
+</script>
