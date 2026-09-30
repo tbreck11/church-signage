@@ -3,7 +3,63 @@
   "fallback": [
     {
       "image": "check-in-screen-generic.png",
-      "duration": 12,
+      "duration": 7,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "kids-baptism.png",
+      "duration": 7,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "memory-verse.png",
+      "duration": 7,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "kids-serve.png",
+      "duration": 7,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "fall-festival.png",
+      "duration": 7,
       "days": [
         "sun",
         "mon",
