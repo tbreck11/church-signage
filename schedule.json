@@ -3,7 +3,7 @@
   "fallback": [
     {
       "image": "check-in-screen-generic.png",
-      "duration": 7,
+      "duration": 12,
       "days": [
         "sun",
         "mon",
@@ -17,7 +17,7 @@
     },
     {
       "image": "kids-baptism.png",
-      "duration": 7,
+      "duration": 12,
       "days": [
         "sun",
         "mon",
@@ -31,7 +31,7 @@
     },
     {
       "image": "memory-verse.png",
-      "duration": 7,
+      "duration": 12,
       "days": [
         "sun",
         "mon",
@@ -45,7 +45,7 @@
     },
     {
       "image": "kids-serve.png",
-      "duration": 7,
+      "duration": 12,
       "days": [
         "sun",
         "mon",
@@ -59,7 +59,7 @@
     },
     {
       "image": "fall-festival.png",
-      "duration": 7,
+      "duration": 12,
       "days": [
         "sun",
         "mon",
