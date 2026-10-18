@@ -1,0 +1,7 @@
+{
+  "rokuIps": ["192.168.1.50", "192.168.1.51"],
+  "rokuPassword": "YOUR_ROKU_DEVELOPER_PASSWORD",
+  "passwords": {
+    "192.168.1.51": "ONLY_IF_THIS_TV_HAS_A_DIFFERENT_PASSWORD"
+  }
+}

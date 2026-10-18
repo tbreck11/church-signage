@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="DataTask" extends="Task">
+    <interface>
+        <!-- Output: array of {localPath, duration, label} for the currently active items -->
+        <field id="playlist" type="array" alwaysNotify="true"/>
+        <!-- Output: "ok" | "empty" | "error" -->
+        <field id="status" type="string" alwaysNotify="true"/>
+        <!-- Output: human-readable detail for the status label -->
+        <field id="statusMessage" type="string" alwaysNotify="true"/>
+    </interface>
+    <script type="text/brightscript" uri="pkg:/source/Config.brs"/>
+    <script type="text/brightscript" uri="DataTask.brs"/>
+</component>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MainScene" extends="Scene">
+    <interface>
+    </interface>
+
+    <script type="text/brightscript" uri="pkg:/source/Config.brs"/>
+    <script type="text/brightscript" uri="MainScene.brs"/>
+
+    <children>
+        <Rectangle id="background" color="0x10182BFF" width="1920" height="1080" />
+
+        <Poster id="poster"
+                width="1920" height="1080"
+                loadDisplayMode="scaleToFit" />
+
+        <Label id="statusLabel"
+               text="Loading..."
+               horizAlign="center"
+               vertAlign="center"
+               width="1920" height="1080"
+               color="0xFFFFFFFF" />
+
+        <Timer id="advanceTimer" repeat="false" />
+        <Timer id="refreshTimer" repeat="true" />
+        <DataTask id="dataTask" />
+    </children>
+</component>

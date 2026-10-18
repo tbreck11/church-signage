@@ -1,0 +1,8 @@
+# Secrets: never commit these
+deploy.json
+deploy.*.json
+!deploy.example.json
+
+# Build output
+out/
+*.zip

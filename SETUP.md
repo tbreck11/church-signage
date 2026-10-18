@@ -4,7 +4,7 @@ This system has three pieces:
 
 1. **A GitHub repo** that holds your announcement images and a `schedule.json` file saying when each one should show. This is the only "server" involved — it's free and you don't touch it directly day-to-day.
 2. **The content manager web page** — where you actually upload images and build the schedule, in plain language, no code.
-3. **The Roku app** (`church-signage.zip`) — sideloaded once onto your church's Roku. It checks the repo every 5 minutes and shows whatever should be on screen.
+3. **The Roku app** (the `roku/` folder in this repo) — sideloaded once onto each signage TV's Roku. It checks the repo every 5 minutes and shows whatever should be on screen.
 
 Set up 1 and 3 once. After that, everything day-to-day happens in the web page.
 
@@ -50,22 +50,15 @@ From here:
 
 ## 3. Point the Roku app at your repo
 
-Before sideloading, the app needs to know which repo to read. Open `source/Config.brs` inside the unzipped project and edit these three lines:
+The app reads the repo named in `roku/source/Config.brs`. It's already set to this repo:
 
 ```brightscript
-githubUser: "YOUR_GITHUB_USERNAME"
-githubRepo: "YOUR_REPO_NAME"
+githubUser: "tbreck11"
+githubRepo: "church-signage"
 githubBranch: "main"
 ```
 
-Then re-zip the project (see below) — or just tell me your repo's username/name and I'll do this and re-zip it for you.
-
-**Re-zipping:** the `manifest` file must sit at the *root* of the zip, not inside a subfolder.
-
-```bash
-cd church-signage-roku
-zip -r church-signage.zip manifest source components images
-```
+Change these only if the content moves to a different repo.
 
 ## 4. Enable Developer Mode on the Roku
 
@@ -75,12 +68,23 @@ A screen appears with a web address (something like `http://192.168.1.xxx`). Acc
 
 ## 5. Sideload the app
 
-1. On a computer on the **same Wi-Fi/network** as the Roku, open the address shown on the TV in step 4.
-2. Log in — username `rokudev`, password whatever you just set.
-3. Click **Upload**, choose **zip**, and select `church-signage.zip`.
-4. The app installs and launches. You should see the splash screen, then it'll start loading content from GitHub within a few seconds.
+The deploy script builds the zip and uploads it to every TV at once. From a computer on the **same network** as the Rokus:
 
-To update the app later (rare — only if you change Config.brs or the code itself), just sideload the new zip the same way; it replaces the old one.
+1. In `roku/`, edit `deploy.json` (copy `deploy.example.json` if it's missing). Put each TV's IP address (the address shown in step 4) in `rokuIps`, and the developer password in `rokuPassword`. If one TV has a different password, give it its own entry under `passwords`. `deploy.json` is git-ignored, so the password never goes to GitHub.
+2. From the `roku/` folder, run:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts\deploy.ps1
+   ```
+
+   To update only certain TVs, pass their IPs: `-RokuIp 192.168.1.50,192.168.1.51`.
+3. The app installs and launches on each TV. You should see the splash screen, then content from GitHub within a few seconds. If a TV fails, the script still updates the rest and then lists the ones that failed.
+
+To upload by hand instead, run the script with `-ZipOnly`. Then open `http://<roku-ip>` in a browser, log in as `rokudev`, and upload `roku/out/church-signage.zip`.
+
+Re-run the script only when the app's code or `Config.brs` changes. Content changes never need it.
+
+On the remote, **Back** or **OK** reloads content right away instead of leaving the app. The other buttons are ignored, except **Home**, which Roku never lets an app block.
 
 ## 6. Leave it running
 
