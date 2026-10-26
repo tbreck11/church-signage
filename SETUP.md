@@ -23,7 +23,7 @@ The content manager page needs a token to upload files on your behalf.
 1. On GitHub, go to **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
 2. Give it a name like `signage-board`. Set **Expiration** to the longest option GitHub offers (a custom date up to a year out, or *No expiration* if it's available). The default is 30 days, and when the token expires the content manager stops logging in.
 3. Under **Repository access**, choose **Only select repositories** and pick the repo you just created. (Don't give it access to anything else.)
-4. Under **Permissions → Repository permissions**, set **Contents** to **Read and write**. Leave everything else as "No access."
+4. Under **Permissions**, click **+ Add permissions**, choose **Contents**, then change its dropdown from *Read-only* to **Read and write**. Don't add anything else (GitHub adds *Metadata: Read-only* on its own, which is fine).
 5. Generate the token and copy it somewhere safe (it starts with `github_pat_`). GitHub only shows it once.
 
 ---
