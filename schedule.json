@@ -30,35 +30,7 @@
       "enabled": true
     },
     {
-      "image": "memory-verse.png",
-      "duration": 12,
-      "days": [
-        "sun",
-        "mon",
-        "tue",
-        "wed",
-        "thu",
-        "fri",
-        "sat"
-      ],
-      "enabled": true
-    },
-    {
       "image": "kids-serve.png",
-      "duration": 12,
-      "days": [
-        "sun",
-        "mon",
-        "tue",
-        "wed",
-        "thu",
-        "fri",
-        "sat"
-      ],
-      "enabled": true
-    },
-    {
-      "image": "fall-festival.png",
       "duration": 12,
       "days": [
         "sun",
