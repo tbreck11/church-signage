@@ -21,7 +21,7 @@ Set up 1 and 3 once. After that, everything day-to-day happens in the web page.
 The content manager page needs a token to upload files on your behalf.
 
 1. On GitHub, go to **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
-2. Give it a name like `signage-board`.
+2. Give it a name like `signage-board`. Set **Expiration** to the longest option GitHub offers (a custom date up to a year out, or *No expiration* if it's available). The default is 30 days, and when the token expires the content manager stops logging in.
 3. Under **Repository access**, choose **Only select repositories** and pick the repo you just created. (Don't give it access to anything else.)
 4. Under **Permissions → Repository permissions**, set **Contents** to **Read and write**. Leave everything else as "No access."
 5. Generate the token and copy it somewhere safe (it starts with `github_pat_`). GitHub only shows it once.
@@ -45,6 +45,10 @@ From here:
 - **Weekly schedule** — add a slide, pick the image, choose which days it should appear (tap the day letters) and a time window, and how many seconds it shows before moving to the next slide. Check **All day** to skip the time window.
 - **Always show** — slides that appear whenever nothing in the weekly schedule matches (e.g. a generic welcome graphic for off-hours).
 - **Save to GitHub** — writes your changes back to the repo. The Roku board picks them up automatically within about 5 minutes, no need to touch the Roku itself.
+
+### When the page stops logging in
+
+This almost always means the access token expired. The page will say so and walk you through it: create a new token with the same settings as above, paste it into **Access token**, and click **Connect**. Nothing else needs to change — the Roku keeps showing content the whole time, because it reads the public repo without a token. The page also shows a warning banner when the token is within two weeks of expiring.
 
 ---
 

@@ -1,85 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
 <title>Signage Board</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+  /* Cyberpunk theme: near-black #0D0D0D base, lavender #D9B8FF as the
+     primary neon, with cyan / mint / hot pink for highlights and states. */
   :root {
-    --bg: #EDF1EE;
-    --surface: #FFFFFF;
-    --surface-2: #F4F7F4;
-    --ink: #172422;
-    --muted: #5B6D68;
-    --line: #D7DED9;
-    --line-strong: #C1CBC4;
-    --accent: #A2731F;
-    --accent-strong: #8A5F19;
-    --accent-ink: #FFF8EC;
-    --accent-wash: #F4E9D3;
-    --good: #2F6B4C;
-    --good-wash: #E3EFE7;
-    --danger: #AE4A34;
-    --danger-wash: #F6E7E2;
-    --shadow: 0 1px 2px rgba(23, 36, 34, 0.06), 0 8px 24px -12px rgba(23, 36, 34, 0.18);
+    color-scheme: dark;
+    --bg: #0D0D0D;
+    --surface: #141317;
+    --surface-2: #1B1920;
+    --ink: #F3ECFF;
+    --muted: #A49CB5;
+    --line: #2A2632;
+    --line-strong: #3E3849;
+    --accent: #D9B8FF;
+    --accent-strong: #EAD7FF;
+    --accent-ink: #0D0D0D;
+    --accent-wash: rgba(217, 184, 255, 0.10);
+    --accent-glow: 0 0 0 1px rgba(217, 184, 255, 0.45), 0 0 18px rgba(217, 184, 255, 0.35);
+    --cyan: #00E5FF;
+    --good: #3DFFB0;
+    --good-wash: rgba(61, 255, 176, 0.08);
+    --warn: #FFE14D;
+    --warn-wash: rgba(255, 225, 77, 0.08);
+    --danger: #FF3D8B;
+    --danger-wash: rgba(255, 61, 139, 0.10);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px -14px rgba(217, 184, 255, 0.18);
     --radius: 10px;
-    --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-    --font-body: "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
-    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0E1513;
-      --surface: #16201D;
-      --surface-2: #1B2622;
-      --ink: #E7ECE8;
-      --muted: #93A49D;
-      --line: #2A3733;
-      --line-strong: #37453F;
-      --accent: #D6A857;
-      --accent-strong: #E7BE72;
-      --accent-ink: #1B140A;
-      --accent-wash: #2C2413;
-      --good: #6FBB93;
-      --good-wash: #17281F;
-      --danger: #E28468;
-      --danger-wash: #2C1B15;
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0E1513;
-    --surface: #16201D;
-    --surface-2: #1B2622;
-    --ink: #E7ECE8;
-    --muted: #93A49D;
-    --line: #2A3733;
-    --line-strong: #37453F;
-    --accent: #D6A857;
-    --accent-strong: #E7BE72;
-    --accent-ink: #1B140A;
-    --accent-wash: #2C2413;
-    --good: #6FBB93;
-    --good-wash: #17281F;
-    --danger: #E28468;
-    --danger-wash: #2C1B15;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    --font-display: "Chakra Petch", "Segoe UI", Roboto, sans-serif;
+    --font-body: "Space Grotesk", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
   * { box-sizing: border-box; }
   body {
-    background: var(--bg);
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(1100px 500px at 85% -10%, rgba(217, 184, 255, 0.12), transparent 60%),
+      radial-gradient(900px 420px at -10% 110%, rgba(0, 229, 255, 0.07), transparent 60%),
+      linear-gradient(rgba(217, 184, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(217, 184, 255, 0.035) 1px, transparent 1px);
+    background-size: auto, auto, 32px 32px, 32px 32px;
+    background-attachment: fixed;
     color: var(--ink);
     font-family: var(--font-body);
     margin: 0;
     padding-block: 28px 80px;
     line-height: 1.45;
+    min-height: 100vh;
   }
-  .wrap { max-width: 880px; margin: 0 auto; padding-inline: 18px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding-inline: 16px; }
 
-  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
-  a { color: var(--accent-strong); }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: 0.02em; }
+  a { color: var(--cyan); }
 
   /* ---------- header ---------- */
   header.top {
@@ -88,8 +68,12 @@
     margin-bottom: 22px;
   }
   .brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-  .brand h1 { font-size: 1.55rem; letter-spacing: -0.01em; }
-  .brand .sub { color: var(--muted); font-size: 0.92rem; }
+  .brand h1 {
+    font-size: 1.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent);
+    text-shadow: 0 0 12px rgba(217, 184, 255, 0.55), 0 0 28px rgba(217, 184, 255, 0.25);
+  }
+  .brand h1 .slash { color: var(--cyan); text-shadow: 0 0 12px rgba(0, 229, 255, 0.6); }
+  .brand .sub { color: var(--muted); font-size: 0.85rem; font-family: var(--font-mono); }
 
   .status-pill {
     display: inline-flex; align-items: center; gap: 7px;
@@ -100,9 +84,9 @@
   }
   .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex: none; }
   .status-pill.connected { color: var(--good); border-color: color-mix(in srgb, var(--good) 35%, var(--line)); background: var(--good-wash); }
-  .status-pill.connected .dot { background: var(--good); }
+  .status-pill.connected .dot { background: var(--good); box-shadow: 0 0 8px var(--good); }
   .status-pill.error { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, var(--line)); background: var(--danger-wash); }
-  .status-pill.error .dot { background: var(--danger); }
+  .status-pill.error .dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
   /* ---------- generic card ---------- */
   .card {
@@ -110,14 +94,20 @@
     border: 1px solid var(--line);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
+    position: relative;
+  }
+  .card::before {
+    content: ""; position: absolute; left: 18px; top: -1px; width: 56px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+    box-shadow: 0 0 10px rgba(217, 184, 255, 0.6);
   }
   .card + .card { margin-top: 18px; }
   .card-head {
     display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     padding: 16px 18px 0 18px;
   }
-  .card-head h2 { font-size: 1.15rem; }
-  .card-head .hint { color: var(--muted); font-size: 0.85rem; }
+  .card-head h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .card-head .hint { color: var(--muted); font-size: 0.78rem; font-family: var(--font-mono); }
   .card-body { padding: 14px 18px 18px 18px; }
 
   label { font-size: 0.82rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; letter-spacing: 0.01em; }
@@ -126,8 +116,10 @@
     border: 1px solid var(--line-strong); border-radius: 7px;
     padding: 8px 10px; width: 100%;
   }
-  input:focus-visible, button:focus-visible, .chip:focus-visible, .status-pill:focus-visible {
-    outline: 2px solid var(--accent); outline-offset: 2px;
+  input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: var(--accent-glow); }
+  input:disabled { opacity: 0.45; }
+  button:focus-visible, .chip:focus-visible, .status-pill:focus-visible, .dropzone:focus-visible {
+    outline: 2px solid var(--cyan); outline-offset: 2px;
   }
   .field { margin-bottom: 12px; }
   .field-row { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -140,8 +132,8 @@
     padding: 9px 14px; letter-spacing: 0.01em;
   }
   button:hover { border-color: var(--line-strong); background: var(--line); }
-  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 0 16px rgba(217, 184, 255, 0.35); }
+  button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); box-shadow: var(--accent-glow); }
   button.ghost { background: transparent; border-color: transparent; color: var(--muted); padding: 6px 8px; }
   button.ghost:hover { background: var(--surface-2); color: var(--ink); }
   button.danger-ghost { background: transparent; border-color: transparent; color: var(--danger); padding: 6px 8px; }
@@ -154,6 +146,15 @@
   #connectMsg { font-size: 0.86rem; margin-top: 10px; min-height: 1.2em; }
   #connectMsg.err { color: var(--danger); }
   #connectMsg.ok { color: var(--good); }
+  #connectMsg.warn { color: var(--warn); }
+  #connectMsg ol { margin: 6px 0 0 0; padding-left: 20px; color: var(--ink); }
+  #connectMsg li { margin-top: 3px; }
+  .token-banner {
+    margin-bottom: 18px; padding: 12px 16px; border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line)); background: var(--warn-wash);
+    color: var(--warn); font-size: 0.88rem;
+  }
+  .token-banner button { margin-left: 8px; padding: 4px 10px; font-size: 0.82rem; }
 
   /* ---------- image library ---------- */
   .dropzone {
@@ -162,7 +163,8 @@
     font-size: 0.9rem; cursor: pointer; background: var(--surface-2);
   }
   .dropzone.drag { border-color: var(--accent); color: var(--accent-strong); background: var(--accent-wash); }
-  .dropzone strong { color: var(--ink); }
+  .dropzone:hover { border-color: var(--accent); }
+  .dropzone strong { color: var(--accent); }
 
   .image-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
@@ -179,7 +181,7 @@
   }
   .image-tile .rm {
     position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%;
-    background: rgba(20, 20, 18, 0.62); color: #fff; border: none; padding: 0;
+    background: rgba(13, 13, 13, 0.8); color: var(--danger); border: 1px solid var(--danger); padding: 0;
     display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .12s;
   }
   .image-tile:hover .rm, .image-tile:focus-within .rm { opacity: 1; }
@@ -211,12 +213,13 @@
     border-radius: 6px; border: 1px solid var(--line-strong); background: var(--surface-2);
     color: var(--muted); cursor: pointer; user-select: none;
   }
-  .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 0 10px rgba(217, 184, 255, 0.45); }
 
   .time-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .time-controls input[type="time"] { width: auto; }
   .time-controls .to { color: var(--muted); font-size: 0.82rem; }
   .allday-toggle { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--muted); cursor: pointer; }
-  .allday-toggle input { width: auto; }
+  .allday-toggle input { width: auto; accent-color: var(--accent); }
 
   .dur-field { display: flex; align-items: center; gap: 6px; }
   .dur-field input { width: 64px; font-family: var(--font-mono); text-align: right; }
@@ -232,7 +235,8 @@
   .savebar {
     position: sticky; bottom: 14px; margin-top: 22px;
     display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    background: color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line)); border-radius: var(--radius);
     box-shadow: var(--shadow); padding: 12px 16px;
   }
   .savebar .msg { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -241,11 +245,11 @@
 
   .hidden { display: none !important; }
 
-  footer.foot { margin-top: 26px; text-align: center; color: var(--muted); font-size: 0.8rem; }
+  footer.foot { margin-top: 26px; text-align: center; color: var(--muted); font-size: 0.75rem; font-family: var(--font-mono); }
   footer.foot a { color: var(--muted); text-decoration: underline; }
 
   @media (prefers-reduced-motion: no-preference) {
-    .image-tile .rm, .dropzone { transition: opacity .12s, border-color .12s, background .12s, color .12s; }
+    .image-tile .rm, .dropzone, button, .chip, input, select { transition: opacity .12s, border-color .12s, background .12s, color .12s, box-shadow .12s; }
   }
 
   @media (max-width: 560px) {
@@ -253,18 +257,22 @@
     .slide-thumb { width: 100%; height: 110px; }
   }
 </style>
+</head>
+<body>
 
 <div class="wrap">
 
   <header class="top">
     <div class="brand">
-      <h1>Signage Board</h1>
+      <h1>Signage<span class="slash">//</span>Board</h1>
       <span class="sub">announcement content &amp; schedule</span>
     </div>
     <button class="status-pill" id="statusPill" type="button">
       <span class="dot"></span><span id="statusText">Not connected</span>
     </button>
   </header>
+
+  <div class="token-banner hidden" id="tokenBanner" role="status"></div>
 
   <!-- ===================== connect card ===================== -->
   <section class="card" id="connectCard">
@@ -300,11 +308,13 @@
       <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:4px;">
         <button class="primary" id="btnConnect" type="button">Connect</button>
         <button class="ghost" id="btnForget" type="button">Forget saved token</button>
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="font-size:0.85rem;">Create a new token &rarr;</a>
       </div>
       <div id="connectMsg"></div>
       <p style="margin:14px 0 0 0; font-size:0.78rem; color:var(--muted);">
         The token is stored only in this browser (never sent anywhere but GitHub) and should be a
         <em>fine-grained</em> token scoped to just this one repository, with Contents: Read and write.
+        GitHub tokens expire (30 days by default), so pick a long expiration when you create one.
       </p>
     </div>
   </section>
@@ -421,26 +431,32 @@
     return fetch(apiUrl(path) + "?ref=" + encodeURIComponent(state.cfg.branch), { headers: ghHeaders() })
       .then(function (res) {
         if (res.status === 404) return null;
-        if (!res.ok) return res.json().then(function (b) { throw new Error(b.message || ("GitHub error " + res.status)); });
+        if (!res.ok) return ghError(res);
         return res.json();
       });
+  }
+  // Turn a failed GitHub response into an Error that carries the HTTP status.
+  function ghError(res) {
+    return res.json().catch(function () { return {}; }).then(function (b) {
+      var err = new Error(b.message || ("GitHub error " + res.status));
+      err.status = res.status;
+      throw err;
+    });
   }
   function ghPut(path, contentStr, sha, message) {
     var body = { message: message, content: utf8ToBase64(contentStr), branch: state.cfg.branch };
     if (sha) body.sha = sha;
     return fetch(apiUrl(path), { method: "PUT", headers: ghHeaders({ "Content-Type": "application/json" }), body: JSON.stringify(body) })
       .then(function (res) {
-        return res.json().then(function (b) {
-          if (!res.ok) throw new Error(b.message || ("GitHub error " + res.status));
-          return b;
-        });
+        if (!res.ok) return ghError(res);
+        return res.json();
       });
   }
   function ghDelete(path, sha, message) {
     var body = { message: message, sha: sha, branch: state.cfg.branch };
     return fetch(apiUrl(path), { method: "DELETE", headers: ghHeaders({ "Content-Type": "application/json" }), body: JSON.stringify(body) })
       .then(function (res) {
-        if (!res.ok) return res.json().then(function (b) { throw new Error(b.message || ("GitHub error " + res.status)); });
+        if (!res.ok) return ghError(res);
         return true;
       });
   }
@@ -459,6 +475,7 @@
   var statusText = document.getElementById("statusText");
   var appEl = document.getElementById("app");
   var connectCard = document.getElementById("connectCard");
+  var tokenBanner = document.getElementById("tokenBanner");
 
   function setStatus(mode, text) {
     statusPill.className = "status-pill" + (mode ? " " + mode : "");
@@ -480,25 +497,83 @@
     connectMsg.className = "";
     connectMsg.textContent = "Connecting…";
     setStatus("", "Connecting…");
+    tokenBanner.classList.add("hidden");
 
-    loadEverything().then(function () {
+    checkRepoAccess().then(function () {
+      return loadEverything();
+    }).then(function () {
       saveCfg(state.cfg);
       connectMsg.className = "ok";
       connectMsg.textContent = "Connected.";
       setStatus("connected", user + "/" + repo);
       appEl.classList.remove("hidden");
     }).catch(function (err) {
-      connectMsg.className = "err";
-      var hint = "";
-      if (err instanceof TypeError) {
-        hint = " This page's network access is being blocked by wherever it's currently open. " +
-          "If you're viewing this inside a Claude preview/artifact, that's expected — download the " +
-          "content-manager.html file instead and open it directly in your browser, or host it via " +
-          "GitHub Pages in your repo (see SETUP.md). It won't work embedded in a Claude page.";
+      appEl.classList.add("hidden");
+      setStatus("error", err.status === 401 ? "Token expired" : "Connection failed");
+      showConnectError(err);
+      if (err.status === 401) {
+        // A dead token is never going to work again; drop it so the next
+        // visit doesn't silently retry it, and put the cursor where the new one goes.
+        if (state.cfg) saveCfg({ user: user, repo: repo, branch: branch, token: "" });
+        var tokenInput = document.getElementById("cfgToken");
+        tokenInput.value = "";
+        tokenInput.focus();
       }
-      connectMsg.textContent = "Couldn't connect: " + err.message + "." + hint;
-      setStatus("error", "Connection failed");
+      if (fromSaved) connectCard.scrollIntoView({ block: "start" });
     });
+  }
+
+  // Confirms the token works and can see the repo before loading anything,
+  // and warns when GitHub says the token is about to expire.
+  function checkRepoAccess() {
+    return fetch("https://api.github.com/repos/" + state.cfg.user + "/" + state.cfg.repo, { headers: ghHeaders() })
+      .then(function (res) {
+        if (!res.ok) return ghError(res);
+        showExpiryWarning(res.headers.get("github-authentication-token-expiration"));
+      });
+  }
+
+  function showExpiryWarning(expHeader) {
+    if (!expHeader) return;
+    var exp = new Date(expHeader.replace(" UTC", "Z").replace(" ", "T").replace(/ ([+-]\d{4})$/, "$1"));
+    if (isNaN(exp)) exp = new Date(expHeader);
+    if (isNaN(exp)) return;
+    var days = Math.floor((exp - Date.now()) / 86400000);
+    if (days > 14) return;
+    tokenBanner.innerHTML = "Heads up: your GitHub access token expires " +
+      (days <= 0 ? "today" : "in " + days + (days === 1 ? " day" : " days")) +
+      " (" + escapeHtml(exp.toLocaleDateString()) + "). Create a new one before then so saving keeps working." +
+      '<a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener"><button type="button">Manage tokens</button></a>';
+    tokenBanner.classList.remove("hidden");
+  }
+
+  function showConnectError(err) {
+    connectMsg.className = "err";
+    var repoName = escapeHtml(state.cfg.user + "/" + state.cfg.repo);
+    if (err instanceof TypeError) {
+      connectMsg.textContent = "Couldn't reach GitHub. Check your internet connection. " +
+        "If you're viewing this inside a Claude preview/artifact, network access is blocked there — download the " +
+        "content-manager.html file and open it directly in your browser instead.";
+    } else if (err.status === 401) {
+      connectMsg.innerHTML = "<strong>Your GitHub access token has expired or was revoked.</strong> " +
+        "This is the usual reason the page stops logging in. To fix it:" +
+        "<ol>" +
+        '<li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub &rarr; New fine-grained token</a>.</li>' +
+        "<li>Expiration: pick the longest option offered (a custom date up to a year out, or No expiration).</li>" +
+        "<li>Repository access: <em>Only select repositories</em> &rarr; " + repoName + ".</li>" +
+        "<li>Permissions: <em>Contents</em> &rarr; Read and write.</li>" +
+        "<li>Generate, copy the <code>github_pat_…</code> value, paste it into <em>Access token</em> above, and click Connect.</li>" +
+        "</ol>";
+    } else if (err.status === 404) {
+      connectMsg.innerHTML = "GitHub can't find <strong>" + repoName + "</strong> with this token. " +
+        "Check the username and repository spelling, and make sure the token was given access to this repository " +
+        "(token settings &rarr; Repository access).";
+    } else if (err.status === 403) {
+      connectMsg.textContent = "GitHub refused the request: " + err.message +
+        ". The token may be missing the Contents permission, or GitHub's rate limit was hit — wait a minute and try again.";
+    } else {
+      connectMsg.textContent = "Couldn't connect: " + err.message + ".";
+    }
   }
 
   function loadEverything() {
@@ -550,6 +625,8 @@
   document.getElementById("btnForget").addEventListener("click", function () {
     clearCfg();
     document.getElementById("cfgToken").value = "";
+    appEl.classList.add("hidden");
+    setStatus("", "Not connected");
     connectMsg.className = "";
     connectMsg.textContent = "Saved token cleared from this browser.";
   });
@@ -584,7 +661,9 @@
     ghDelete("images/" + img.name, img.sha, "Remove " + img.name + " via content manager").then(function () {
       state.images = state.images.filter(function (i) { return i.name !== img.name; });
       renderImages();
-    }).catch(function (err) { alert("Couldn't delete: " + err.message); });
+    }).catch(function (err) {
+      alert(err.status === 401 ? "Couldn't delete: your GitHub token has expired. Paste a new one at the top of the page and Connect." : "Couldn't delete: " + err.message);
+    });
   }
 
   function uploadFiles(files) {
@@ -609,7 +688,7 @@
             branch: state.cfg.branch,
             sha: existing ? existing.sha : undefined
           })
-        }).then(function (res) { return res.json().then(function (b) { if (!res.ok) throw new Error(b.message || "upload failed"); return b; }); })
+        }).then(function (res) { if (!res.ok) return ghError(res); return res.json(); })
           .then(function (b) {
             var entry = { name: name, sha: b.content.sha, download_url: b.content.download_url };
             state.images = state.images.filter(function (i) { return i.name !== name; });
@@ -617,7 +696,7 @@
             renderImages();
             markDirtyMaybeUsed(name);
           }).catch(function (err) {
-            tile.querySelector(".thumb").textContent = "failed";
+            tile.querySelector(".thumb").textContent = err.status === 401 ? "token expired" : "failed";
             tile.querySelector(".thumb").style.color = "var(--danger)";
             console.error(err);
           });
@@ -655,7 +734,8 @@
 
   function refreshImageSelects() {
     document.querySelectorAll("select.slide-select").forEach(function (sel) {
-      var current = sel.value;
+      // dataset.value holds the slide's image even before its options exist
+      var current = sel.dataset.value || sel.value;
       sel.innerHTML = state.images.map(function (img) {
         return '<option value="' + escapeHtml(img.name) + '">' + escapeHtml(img.name) + "</option>";
       }).join("") || '<option value="">(no images uploaded yet)</option>';
@@ -722,9 +802,11 @@
       "</div>";
 
     var select = row.querySelector(".slide-select");
+    select.dataset.value = item.image;
     select.value = item.image;
     select.addEventListener("change", function () {
       item.image = select.value;
+      select.dataset.value = select.value;
       var f = state.images.find(function (i) { return i.name === item.image; });
       row.querySelector(".slide-thumb").src = f ? f.download_url : "";
       markDirty();
@@ -832,7 +914,10 @@
       })
       .catch(function (err) {
         saveMsg.className = "msg err";
-        saveMsg.textContent = "Couldn't save: " + err.message;
+        saveMsg.textContent = err.status === 401
+          ? "Couldn't save: your GitHub token has expired. Paste a new one at the top of the page and Connect, then save again."
+          : "Couldn't save: " + err.message;
+        if (err.status === 401) setStatus("error", "Token expired");
       });
   });
 
@@ -843,7 +928,9 @@
     document.getElementById("cfgRepo").value = saved.repo || "";
     document.getElementById("cfgBranch").value = saved.branch || "main";
     document.getElementById("cfgToken").value = saved.token || "";
-    connect(true);
+    if (saved.token) connect(true);
   }
 })();
 </script>
+</body>
+</html>
