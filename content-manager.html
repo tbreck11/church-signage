@@ -428,7 +428,9 @@
   }
 
   function ghGet(path) {
-    return fetch(apiUrl(path) + "?ref=" + encodeURIComponent(state.cfg.branch), { headers: ghHeaders() })
+    // no-store: GitHub lets browsers cache these for 60s, and a stale copy
+    // carries an old sha that makes the next save fail with a conflict.
+    return fetch(apiUrl(path) + "?ref=" + encodeURIComponent(state.cfg.branch), { headers: ghHeaders(), cache: "no-store" })
       .then(function (res) {
         if (res.status === 404) return null;
         if (!res.ok) return ghError(res);
@@ -899,6 +901,28 @@
     return out;
   }
 
+  // GitHub rejects a save whose sha isn't the file's latest (409), which
+  // happens when schedule.json was saved from another tab or device since
+  // this page loaded. Offer to overwrite with what's on screen.
+  function isConflict(err) {
+    return err.status === 409 || /does not match/i.test(err.message);
+  }
+
+  function saveSchedule(json, allowOverwrite) {
+    return ghPut("schedule.json", json, state.scheduleSha, "Update schedule via content manager")
+      .catch(function (err) {
+        if (!allowOverwrite || !isConflict(err)) throw err;
+        if (!confirm("The schedule was changed on GitHub since this page loaded (maybe from another tab or device).\n\n" +
+            "OK = save what's on this screen and replace that version.\nCancel = keep it, so you can reload the page to see it.")) {
+          throw new Error("schedule changed elsewhere. Reload the page to see the latest version, or Save again to replace it");
+        }
+        return ghGet("schedule.json").then(function (latest) {
+          state.scheduleSha = latest ? latest.sha : null;
+          return saveSchedule(json, false);
+        });
+      });
+  }
+
   document.getElementById("btnSave").addEventListener("click", function () {
     var payload = {
       items: state.items.filter(function (i) { return i.image; }).map(itemToApi),
@@ -907,7 +931,7 @@
     var json = JSON.stringify(payload, null, 2);
     saveMsg.className = "msg";
     saveMsg.textContent = "Saving…";
-    ghPut("schedule.json", json, state.scheduleSha, "Update schedule via content manager")
+    saveSchedule(json, true)
       .then(function (res) {
         state.scheduleSha = res.content.sha;
         markClean("Saved just now. The board checks for updates automatically.");
