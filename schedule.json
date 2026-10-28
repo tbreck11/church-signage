@@ -42,6 +42,48 @@
         "sat"
       ],
       "enabled": true
+    },
+    {
+      "image": "memory-verse-fall-2026.png",
+      "duration": 12,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "kids-christmas-play.png",
+      "duration": 12,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
+    },
+    {
+      "image": "winterwonderland.png",
+      "duration": 12,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
     }
   ]
 }
