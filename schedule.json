@@ -84,6 +84,20 @@
         "sat"
       ],
       "enabled": true
+    },
+    {
+      "image": "thanksgiving-bg.png",
+      "duration": 12,
+      "days": [
+        "sun",
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat"
+      ],
+      "enabled": true
     }
   ]
 }
